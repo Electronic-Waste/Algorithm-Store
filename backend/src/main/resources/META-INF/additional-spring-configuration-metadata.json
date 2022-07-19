@@ -1,0 +1,13 @@
+{
+  "properties": [
+    {
+      "name": "path.algorithm",
+      "type": "java.lang.String",
+      "description": "path to the algorithm folder."
+    },
+    {
+      "name": "path.crawler",
+      "type": "java.lang.String",
+      "description": "path to the crawler folder."
+    }
+  ] }
