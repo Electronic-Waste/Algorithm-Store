@@ -1,45 +1,58 @@
 package com.example.backend;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.io.IOUtils;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.http.ContentDisposition;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.http.HttpServletResponse;
-import java.io.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.List;
-import java.util.Map;
 
+@Slf4j
 @RestController
 public class AlgorithmController {
-    @Autowired
-    AlgorithmDao algorithmDao;
 
-    @GetMapping("/upload")
-    public String upload() {
-        return "upload";
+    @Value("${path.algorithm}")
+    private String algorithmPath;
+
+    @Value("${path.crawler}")
+    private String crawlerPath;
+
+    private final AlgorithmDao algorithmDao;
+
+    public AlgorithmController(AlgorithmDao algorithmDao) {
+        this.algorithmDao = algorithmDao;
     }
 
-    @RequestMapping("/getAlgorithms")
-    List<Algorithm> getAlgorithms() {
-        return algorithmDao.getAlgorithms();
+    @GetMapping("/algorithm")
+    ResponseEntity<List<Algorithm>> getAlgorithms() {
+        return ResponseEntity.ok(algorithmDao.getAlgorithms());
     }
 
     @PostMapping("/upload")
-    public String upload(@RequestParam("file") MultipartFile file, @RequestParam("title") String title,
-                         @RequestParam("author") String author, @RequestParam("tag") String tag,
-                         @RequestParam("description") String description, @RequestParam("image") String image) {
+    public ResponseEntity<?> upload(@RequestParam("file") MultipartFile file, @RequestParam("title") String title,
+                                    @RequestParam("author") String author, @RequestParam("tag") String tag,
+                                    @RequestParam("description") String description, @RequestParam("image") String image) {
         if (file.isEmpty()) {
-            return "上传失败，请选择文件";
+            return ResponseEntity.badRequest().body("文件为空");
         }
 
         String fileName = file.getOriginalFilename();
-        String filePath = "D:/PRP/Algorithm-Store/files/";
-        File dest = new File(filePath + fileName);
+        File dest = new File(algorithmPath + fileName);
         try {
             // Upload file
             file.transferTo(dest);
-            System.out.println("上传成功");
+            log.info(fileName + "上传成功");
 
             // Write to database
             Algorithm algorithm = new Algorithm();
@@ -50,50 +63,27 @@ public class AlgorithmController {
             algorithm.setDescription(description);
             algorithm.setImage(image);
             algorithmDao.save(algorithm);
-            System.out.println(algorithm);
-            System.out.println("信息更新成功");
 
-            return "上传成功";
-        } catch (IOException e) {
-            System.out.println("上传失败");
+            return ResponseEntity.created(new URI("/algorithm/" + fileName)).build();
+        } catch (IOException | URISyntaxException e) {
+            log.error(e.toString());
+            return ResponseEntity.internalServerError().body("上传失败");
         }
-        return "上传失败";
     }
 
-    @RequestMapping("/download/{path}")
-    public void download(@PathVariable("path") String path, HttpServletResponse response) {
+    @GetMapping("/download/{fileName}")
+    public ResponseEntity<?> download(@PathVariable String fileName) {
         // Get file
-        String fileDir = "D:/PRP/Algorithm-Store/files/";
-        String filePath = fileDir + path;
-        File file = new File(filePath);
-
-        byte[] buffer = new byte[1024];
-        BufferedInputStream bis = null;
-        OutputStream os = null;
         try {
-            if (file.exists()) {
-                response.setContentType("application/octet-stream");
-                response.setCharacterEncoding("UTF-8");
-                os = response.getOutputStream();
-                bis = new BufferedInputStream(new FileInputStream(file));
-                while (bis.read(buffer) != -1) {
-                    os.write(buffer);
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                if (bis != null) {
-                    bis.close();
-                }
-                if (os != null) {
-                    os.flush();
-                    os.close();
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            FileInputStream fis = new FileInputStream(algorithmPath + fileName);
+            HttpHeaders httpHeaders = new HttpHeaders();
+            httpHeaders.set(HttpHeaders.CONTENT_DISPOSITION, ContentDisposition.attachment().filename(fileName).build().toString());
+            return ResponseEntity.ok().headers(httpHeaders).body(IOUtils.toByteArray(fis));
+        } catch (FileNotFoundException e) {
+            return ResponseEntity.notFound().build();
+        } catch (IOException e) {
+            log.error(e.toString());
+            return ResponseEntity.internalServerError().build();
         }
     }
 }
