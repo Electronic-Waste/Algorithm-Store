@@ -1,0 +1,23 @@
+.ShowCards{
+    margin-left: 180px;
+    height: 420px;
+    width: 1200px;
+    background: #eee;
+    padding: 10px 0;
+    white-space: nowrap; /* 禁止超出自动换行 */
+    overflow-y:scroll; /* 横向滑动 */
+    /*float: left;*/
+    overflow-x:scroll; /* 纵向滑动 */
+}
+.ShowCards::-webkit-scrollbar{
+    display: none;
+}
+.Cards{
+    display: inline-block;
+    /*display: inline-block; !*行内块元素*!*/
+    /*line-height: 300px;*/
+    /*float: left;*/
+}
+.Blank{
+    width: 50px;
+}
