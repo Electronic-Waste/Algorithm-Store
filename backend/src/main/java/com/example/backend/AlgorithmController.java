@@ -3,6 +3,7 @@ package com.example.backend;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.http.ContentDisposition;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
@@ -38,7 +39,7 @@ public class AlgorithmController {
         return ResponseEntity.ok(algorithmDao.getAlgorithms());
     }
 
-    @PostMapping("/algorithm")
+    @PostMapping("/upload")
     public ResponseEntity<?> upload(@RequestParam("file") MultipartFile file, @RequestParam("title") String title,
                                     @RequestParam("author") String author, @RequestParam("tag") String tag,
                                     @RequestParam("description") String description, @RequestParam("image") String image) {
@@ -70,7 +71,7 @@ public class AlgorithmController {
         }
     }
 
-    @GetMapping("/algorithm/{fileName}")
+    @GetMapping("/download/{fileName}")
     public ResponseEntity<?> download(@PathVariable String fileName) {
         // Get file
         try {

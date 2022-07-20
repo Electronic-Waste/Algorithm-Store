@@ -3,11 +3,13 @@
     {
       "name": "path.algorithm",
       "type": "java.lang.String",
+      "defaultValue": "D:/PRP/Algorithm-Store/algorithms",
       "description": "path to the algorithm folder."
     },
     {
       "name": "path.crawler",
       "type": "java.lang.String",
+      "defaultValue": "D:/PRP/Algorithm-Store/crawlers",
       "description": "path to the crawler folder."
     }
   ] }
