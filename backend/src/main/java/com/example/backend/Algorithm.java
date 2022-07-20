@@ -14,6 +14,7 @@ public class Algorithm {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
+    private int type;   // 0: algorithm 1: crawler
     private String title;
     private String filename;
     private String author;

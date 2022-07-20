@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.data.relational.core.sql.In;
 import org.springframework.http.ContentDisposition;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
@@ -34,21 +35,29 @@ public class AlgorithmController {
         this.algorithmDao = algorithmDao;
     }
 
-    @GetMapping("/algorithm")
+    @GetMapping("/algorithms")
     ResponseEntity<List<Algorithm>> getAlgorithms() {
         return ResponseEntity.ok(algorithmDao.getAlgorithms());
     }
 
+    @GetMapping("/crawlers")
+    ResponseEntity<List<Algorithm>> getCrawlers() {
+        return ResponseEntity.ok(algorithmDao.getCrawlers());
+    }
+
     @PostMapping("/upload")
-    public ResponseEntity<?> upload(@RequestParam("file") MultipartFile file, @RequestParam("title") String title,
-                                    @RequestParam("author") String author, @RequestParam("tag") String tag,
-                                    @RequestParam("description") String description, @RequestParam("image") String image) {
+    public ResponseEntity<?> upload(
+            @RequestParam("file") MultipartFile file, @RequestParam("title") String title,
+            @RequestParam("type") Integer type,@RequestParam("author") String author, @RequestParam("tag") String tag,
+            @RequestParam("description") String description, @RequestParam("image") String image) {
         if (file.isEmpty()) {
             return ResponseEntity.badRequest().body("文件为空");
         }
 
         String fileName = file.getOriginalFilename();
-        File dest = new File(algorithmPath + fileName);
+        String path = type == 0 ? algorithmPath : crawlerPath;
+        String folder = type == 0 ? "/algorithms/" : "/crawlers/";
+        File dest = new File(path + fileName);
         try {
             // Upload file
             file.transferTo(dest);
@@ -57,6 +66,7 @@ public class AlgorithmController {
             // Write to database
             Algorithm algorithm = new Algorithm();
             algorithm.setTitle(title);
+            algorithm.setType(type);
             algorithm.setFilename(fileName);
             algorithm.setAuthor(author);
             algorithm.setTag(tag);
@@ -64,18 +74,19 @@ public class AlgorithmController {
             algorithm.setImage(image);
             algorithmDao.save(algorithm);
 
-            return ResponseEntity.created(new URI("/algorithm/" + fileName)).build();
+            return ResponseEntity.created(new URI(folder + fileName)).build();
         } catch (IOException | URISyntaxException e) {
             log.error(e.toString());
             return ResponseEntity.internalServerError().body("上传失败");
         }
     }
 
-    @GetMapping("/download/{fileName}")
-    public ResponseEntity<?> download(@PathVariable String fileName) {
-        // Get file
+    @GetMapping("/download/{type}/{fileName}")
+    public ResponseEntity<?> download(@PathVariable String fileName, @PathVariable String type) {
         try {
-            FileInputStream fis = new FileInputStream(algorithmPath + fileName);
+            int typeInt = Integer.parseInt(type);
+            String path = typeInt == 0 ? algorithmPath : crawlerPath;
+            FileInputStream fis = new FileInputStream(path + fileName);
             HttpHeaders httpHeaders = new HttpHeaders();
             httpHeaders.set(HttpHeaders.CONTENT_DISPOSITION, ContentDisposition.attachment().filename(fileName).build().toString());
             return ResponseEntity.ok().headers(httpHeaders).body(IOUtils.toByteArray(fis));
@@ -86,4 +97,6 @@ public class AlgorithmController {
             return ResponseEntity.internalServerError().build();
         }
     }
+
+
 }
