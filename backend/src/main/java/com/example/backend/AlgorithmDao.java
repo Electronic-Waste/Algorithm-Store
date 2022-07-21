@@ -7,5 +7,7 @@ public interface AlgorithmDao {
 
     List<Algorithm> getCrawlers();
 
+    Algorithm getItemById(int id);
+
     void save(Algorithm algorithm);
 }
