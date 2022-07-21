@@ -1,0 +1,105 @@
+.FirstBox{
+    /*background-color: darkgrey;*/
+    /*position: relative;*/
+    /*left: 160px;*/
+    /*right: 160px;*/
+    width: 100%;
+    height: 150px;
+    margin-top: 50px;
+    border-bottom: gray 1px solid;
+}
+.FirstBoxImg{
+    /*background-color: red;*/
+    width: 120px;
+    height: 120px;
+    position: relative;
+    left: 160px;
+    top: 15px;
+    float: left;
+}
+.FirstBoxText{
+    /*background-color: blue;*/
+    width: 480px;
+    height: 120px;
+    position: relative;
+    left: 180px;
+    top: 15px;
+    float: left;
+}
+.FirstBoxButton{
+    /*background-color: red;*/
+    width: 240px;
+    height: 60px;
+    position: relative;
+    right: 160px;
+    float: right;
+    top: 45px;
+}
+.Title{
+    font-size: 35px;
+    font-weight: bold;
+    /*background-color: green;*/
+    position: relative;
+    top:10px;
+    height: 50px;
+    width: 100%;
+}
+.author{
+    font-size: 15px;
+    font-weight: bold;
+
+    /*background-color: lightpink;*/
+    position: relative;
+    top: 10px;
+    height: 20px;
+}
+.tag{
+    font-size: 15px;
+    font-weight: bold;
+    /*background-color: lightpink;*/
+    position: relative;
+    top:30px;
+    height: 20px;
+    width: 50px;
+    float: left;
+    /*border-right: gray 1px solid;*/
+    /*float: left;*/
+}
+.type{
+    font-size: 15px;
+    font-weight: bold;
+    /*background-color: lightpink;*/
+    position: relative;
+    top:30px;
+    height: 20px;
+    width: 50px;
+    float: left;
+}
+.SecondBox{
+    /*background-color: darkgrey;*/
+    position: relative;
+    left: 160px;
+    /*right: 160px;*/
+    width: 100%;
+
+    margin-top: 20px;
+    /*border-bottom: gray 1px solid;*/
+}
+.SecondBoxTitle{
+    font-size: 35px;
+    font-weight: bold;
+}
+.SecondBoxText{
+    font-size: 20px;
+    font-weight: bold;
+    border: gray 1px solid;
+    width: 60%;
+    height: 150px;
+    border-radius: 5px;
+    box-shadow: gray 1px 1px 1px 1px;
+}
+.TextContent{
+    margin-left: 20px;
+    margin-right: 20px;
+    word-wrap:break-word;
+}
