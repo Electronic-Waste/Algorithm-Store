@@ -97,6 +97,13 @@ public class AlgorithmController {
             return ResponseEntity.internalServerError().build();
         }
     }
+    
+    @GetMapping("/getitem/{id}")
+    public ResponseEntity<Algorithm> getItem(@PathVariable String id) {
+        int idInt = Integer.parseInt(id);
+        Algorithm result = algorithmDao.getItemById(idInt);
+        return ResponseEntity.ok(result);
+    }
 
 
 }

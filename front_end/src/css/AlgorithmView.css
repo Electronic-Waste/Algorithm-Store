@@ -1,0 +1,8 @@
+.CenterTitle{
+    text-align: center;
+}
+.FlexEle{
+    display: inline-block;
+    margin-left: 40px;
+    margin-top:40px;
+}

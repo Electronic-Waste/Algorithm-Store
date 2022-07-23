@@ -19,6 +19,9 @@ public class AlgorithmDaoImpl implements AlgorithmDao{
     public List<Algorithm> getCrawlers() { return algorithmRepository.getCrawlers(); }
 
     @Override
+    public Algorithm getItemById(int id) { return algorithmRepository.getById(id); }
+
+    @Override
     public void save(Algorithm algorithm) {
         algorithmRepository.save(algorithm);
     }
