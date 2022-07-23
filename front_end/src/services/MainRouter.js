@@ -25,7 +25,7 @@ class MainRouter extends React.Component{
                     <Route  path="/algorithm" element={<AlgorithmView/>} />
                     <Route  path="/upload" element={<UploadView/>} />
                     <Route  path="/crawler" element={<CrawlerView/>}/>
-                    <Route path="/index" element={<IndexView/>}/>
+                    <Route path="/index/:id" element={<IndexView />}/>
                 </Routes>
             </Router>
         );

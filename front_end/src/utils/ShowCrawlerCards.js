@@ -9,12 +9,22 @@ class ShowCrawlerCards extends React.Component{
         super(props);
 
 
-        const Data = FetchCrawlersInHome();
         this.state={
-            cards:Data,
+            cards:[],
         }
     }
+    componentDidMount() {
+        FetchCrawlersInHome().then(res=>{
+            // console.log(res)
+            this.setState({
+                cards:res,
+            })
+        });
+    }
+
     render(){
+        // console.log("homeCrawler:");
+        // console.log(this.state.cards);
         return(
             <React.Fragment>
                 <div className="showTitle">

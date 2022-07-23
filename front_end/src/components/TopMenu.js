@@ -34,13 +34,13 @@ class TopMenu extends React.Component{
                 key:'algorithm',
                 path: '/algorithm'
             },
-            {
-                label:
-                    '搜索'
-                ,
-                key: 'search',
-                path: '/search'
-            },
+            // {
+            //     label:
+            //         '搜索'
+            //     ,
+            //     key: 'search',
+            //     path: '/search'
+            // },
             {
                 label: <a href={"/upload"}>上传</a>,
                 key: 'upload',

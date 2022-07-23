@@ -5,12 +5,12 @@
     background: #eee;
     padding: 10px 0;
     white-space: nowrap; /* 禁止超出自动换行 */
-    overflow-y:scroll; /* 横向滑动 */
+    overflow-y:hidden; /* 横向滑动 */
     /*float: left;*/
-    overflow-x:scroll; /* 纵向滑动 */
+    overflow-x: scroll; /* 纵向滑动 */
 }
 .ShowCards::-webkit-scrollbar{
-    display: none;
+    /*display: none;*/
 }
 .Cards{
     display: inline-block;

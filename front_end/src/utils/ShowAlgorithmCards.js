@@ -4,15 +4,26 @@ import 'antd/dist/antd.min.css';
 import ShowCards from "../components/ShowCards";
 import "../css/ShowCrawlerCards.css"
 import FetchAlgorithmsInHome from "../services/FetchAlgorithmsInHome";
+import FetchCrawlersInHome from "../services/FetchCrawlersInHome";
 class ShowAlgorithmCards extends React.Component{
     constructor(props) {
         super(props);
-        const Data = FetchAlgorithmsInHome();
         this.state={
-            data:Data,
+            cards:[],
         }
     }
+    componentDidMount() {
+        FetchAlgorithmsInHome().then(res=>{
+            // console.log(res)
+            this.setState({
+                cards:res,
+            })
+        });
+    }
+
     render(){
+        // console.log("homeAlgorithm:");
+        // console.log(this.state.cards);
         return(
             <React.Fragment>
                 <div className="showTitle">
@@ -27,7 +38,7 @@ class ShowAlgorithmCards extends React.Component{
                 <div className="Clear"/>
 
 
-                <ShowCards cards={this.state.data}/>
+                <ShowCards cards={this.state.cards}/>
             </React.Fragment>
 
         );
