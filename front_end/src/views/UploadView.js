@@ -27,6 +27,8 @@ class UploadView extends React.Component{
         formData.append("tag", value["tag"]);
         console.log(value);
         FetchUpdate(formData);
+        alert("Upload Success!");
+        window.location.href="/";
     }
 
     render() {
